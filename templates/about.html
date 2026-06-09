@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}About — Lens & Light Studio{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container" style="position:relative;z-index:1">
+    <span class="section-tag">The Photographer</span>
+    <h1 class="page-hero-title">About <span class="gold">Us</span></h1>
+    <p class="page-hero-sub">Passionate storyteller. Visual artist. Your moment's guardian.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap reveal">
+        <div class="about-img-main" style="background:linear-gradient(135deg,#1a1208,#2a1f0a);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;color:var(--text-muted)">
+          <div style="font-size:5rem">📷</div>
+          <div style="font-size:1rem">Photographer Portrait</div>
+          <div style="font-size:.8rem;color:var(--accent)">Upload via Admin Panel</div>
+        </div>
+        <div class="about-img-accent" style="background:linear-gradient(135deg,var(--accent-glow),#1a1208);display:flex;align-items:center;justify-content:center">
+          <div style="text-align:center">
+            <div style="font-size:1.8rem">✦</div>
+            <div style="font-size:.75rem;color:var(--accent);font-weight:700">Award Winner</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <span class="section-tag">My Story</span>
+        <h2 class="section-title">Crafting Visual <span class="gold">Masterpieces</span></h2>
+        <p>With over 5 years behind the lens, I've had the incredible privilege of documenting life's most meaningful moments — from the nervous excitement of wedding mornings to the pure, unscripted joy of family gatherings.</p>
+        <p>My approach is simple: I believe every person has a unique story, and my role is to tell it authentically. I combine technical mastery with a genuine human connection to ensure you feel completely comfortable and natural in front of the camera.</p>
+        <p>Based in New York, I travel worldwide for the right story. Whether it's an intimate elopement in the mountains or a grand ballroom wedding, I bring the same level of dedication, creativity, and passion to every single shoot.</p>
+        <div class="skills-list" style="margin-bottom:32px">
+          <span class="skill-tag">Wedding Photography</span>
+          <span class="skill-tag">Portrait Sessions</span>
+          <span class="skill-tag">Event Coverage</span>
+          <span class="skill-tag">Studio Lighting</span>
+          <span class="skill-tag">Adobe Lightroom</span>
+          <span class="skill-tag">Capture One</span>
+          <span class="skill-tag">Film Photography</span>
+          <span class="skill-tag">Drone Aerial</span>
+        </div>
+        <a href="{{ url_for('public.booking') }}" class="btn btn-primary">Work With Me →</a>
+      </div>
+    </div>
+
+    <div class="about-stats reveal" style="margin-top:80px">
+      <div class="card about-stat">
+        <div class="about-stat-num">500+</div>
+        <div class="about-stat-label">Happy Clients</div>
+      </div>
+      <div class="card about-stat">
+        <div class="about-stat-num">{{ total_bookings }}</div>
+        <div class="about-stat-label">Sessions Completed</div>
+      </div>
+      <div class="card about-stat">
+        <div class="about-stat-num">{{ gallery_count }}</div>
+        <div class="about-stat-label">Portfolio Images</div>
+      </div>
+      <div class="card about-stat">
+        <div class="about-stat-num">5+</div>
+        <div class="about-stat-label">Years Experience</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container" style="position:relative;z-index:1">
+    <span class="section-tag">Let's Connect</span>
+    <h2 class="section-title">Ready to <span class="gold">Work Together?</span></h2>
+    <p>I'd love to hear about your vision and create something extraordinary together.</p>
+    <div class="cta-actions">
+      <a href="{{ url_for('public.booking') }}" class="btn btn-primary">✦ Book a Session</a>
+      <a href="{{ url_for('public.contact') }}" class="btn btn-outline">Say Hello</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

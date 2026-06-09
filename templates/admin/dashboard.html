@@ -1,0 +1,102 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Dashboard — Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+  <div class="a-card stat-card">
+    <div class="stat-icon">📅</div>
+    <div class="stat-value">{{ stats.total_bookings }}</div>
+    <div class="stat-label">Total Bookings</div>
+  </div>
+  <div class="a-card stat-card">
+    <div class="stat-icon">⏳</div>
+    <div class="stat-value">{{ stats.pending_bookings }}</div>
+    <div class="stat-label">Pending</div>
+  </div>
+  <div class="a-card stat-card">
+    <div class="stat-icon">✅</div>
+    <div class="stat-value">{{ stats.confirmed_bookings }}</div>
+    <div class="stat-label">Confirmed</div>
+  </div>
+  <div class="a-card stat-card">
+    <div class="stat-icon">✉️</div>
+    <div class="stat-value">{{ stats.unread_inquiries }}</div>
+    <div class="stat-label">Unread Messages</div>
+  </div>
+  <div class="a-card stat-card">
+    <div class="stat-icon">🖼️</div>
+    <div class="stat-value">{{ stats.gallery_count }}</div>
+    <div class="stat-label">Gallery Photos</div>
+  </div>
+  <div class="a-card stat-card">
+    <div class="stat-icon">💼</div>
+    <div class="stat-value">{{ stats.service_count }}</div>
+    <div class="stat-label">Services</div>
+  </div>
+  <div class="a-card stat-card">
+    <div class="stat-icon">⭐</div>
+    <div class="stat-value">{{ stats.testimonial_count }}</div>
+    <div class="stat-label">Testimonials</div>
+  </div>
+  <div class="a-card stat-card">
+    <div class="stat-icon">📨</div>
+    <div class="stat-value">{{ stats.total_inquiries }}</div>
+    <div class="stat-label">Total Inquiries</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:4px">
+  <!-- RECENT BOOKINGS -->
+  <div class="a-card">
+    <div class="page-header" style="margin-bottom:20px">
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem">Recent Bookings</h3>
+      <a href="{{ url_for('admin.bookings') }}" class="btn-a btn-a-secondary">View All</a>
+    </div>
+    {% if recent_bookings %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Client</th><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for b in recent_bookings %}
+          <tr>
+            <td><div style="font-weight:600">{{ b.name }}</div><div style="font-size:.78rem;color:var(--muted)">{{ b.email }}</div></td>
+            <td style="color:var(--muted);font-size:.85rem">{{ b.event_date }}</td>
+            <td><span class="b b-{{ b.status }}">{{ b.status }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--muted);text-align:center;padding:30px">No bookings yet.</p>
+    {% endif %}
+  </div>
+
+  <!-- RECENT INQUIRIES -->
+  <div class="a-card">
+    <div class="page-header" style="margin-bottom:20px">
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem">Recent Inquiries</h3>
+      <a href="{{ url_for('admin.inquiries') }}" class="btn-a btn-a-secondary">View All</a>
+    </div>
+    {% if recent_inquiries %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>From</th><th>Subject</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for i in recent_inquiries %}
+          <tr>
+            <td><div style="font-weight:600">{{ i.name }}</div><div style="font-size:.78rem;color:var(--muted)">{{ i.email }}</div></td>
+            <td style="color:var(--muted);font-size:.85rem;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ i.subject or 'General Inquiry' }}</td>
+            <td><span class="b {% if not i.read %}b-unread{% else %}b-confirmed{% endif %}">{% if not i.read %}New{% else %}Read{% endif %}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--muted);text-align:center;padding:30px">No inquiries yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

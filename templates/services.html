@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Services & Pricing — Lens & Light Studio{% endblock %}
+{% block meta_desc %}Photography packages for weddings, portraits, events, family, newborn, and commercial shoots.{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container" style="position:relative;z-index:1">
+    <span class="section-tag">Packages & Pricing</span>
+    <h1 class="page-hero-title">Our <span class="gold">Services</span></h1>
+    <p class="page-hero-sub">Transparent pricing, no hidden fees. Every package crafted with care.</p>
+  </div>
+</div>
+
+<section class="section" style="padding-top:40px">
+  <div class="container">
+    {% set icons = ['💍','📷','🎉','👨‍👩‍👧','🏢','👶','🌟','🎨'] %}
+    <div class="services-grid">
+      {% for service in services %}
+      <div class="card service-card reveal {% if service.popular %}popular{% endif %}">
+        {% if service.popular %}<span class="badge badge-gold popular-tag">Most Popular</span>{% endif %}
+        <div class="service-icon">{{ icons[loop.index0 % icons|length] }}</div>
+        <h3 class="service-name">{{ service.name }}</h3>
+        {% if service.category %}<span class="badge badge-gold" style="margin-bottom:12px;font-size:.7rem">{{ service.category }}</span>{% endif %}
+        <div class="service-price">${{ "%.0f"|format(service.price) }}<span> starting price</span></div>
+        <div class="service-duration">⏱ {{ service.duration }}</div>
+        <p class="service-desc">{{ service.description }}</p>
+        <ul class="service-features">
+          {% for f in service.features %}
+          <li>{{ f }}</li>
+          {% endfor %}
+        </ul>
+        <a href="{{ url_for('public.booking') }}?service={{ service.id }}" class="btn btn-primary" style="width:100%;justify-content:center">Book This Package</a>
+      </div>
+      {% else %}
+      <div style="text-align:center;grid-column:1/-1;padding:60px">
+        <p style="color:var(--text-muted)">No services listed yet. Add them via the admin panel.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container" style="position:relative;z-index:1">
+    <span class="section-tag">Custom Needs?</span>
+    <h2 class="section-title">Need a <span class="gold">Custom Package?</span></h2>
+    <p>Not sure which package is right for you? Let's talk and build something perfect for your needs.</p>
+    <div class="cta-actions">
+      <a href="{{ url_for('public.contact') }}" class="btn btn-primary">Get a Custom Quote</a>
+      <a href="{{ url_for('public.booking') }}" class="btn btn-outline">Book Directly</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

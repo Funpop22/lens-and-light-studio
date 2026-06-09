@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>{% block title %}Admin — Lens & Light{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="admin-sidebar" id="adminSidebar">
+  <div class="sidebar-brand">
+    <a class="logo" href="{{ url_for('public.index') }}">Lens<span>&</span>Light</a>
+    <p>Admin Dashboard</p>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">Main</div>
+    <a href="{{ url_for('admin.dashboard') }}" class="sidebar-link {% if request.endpoint=='admin.dashboard' %}active{% endif %}">
+      <span class="sidebar-icon">📊</span> Dashboard
+    </a>
+    <div class="sidebar-section">Content</div>
+    <a href="{{ url_for('admin.gallery') }}" class="sidebar-link {% if 'gallery' in request.endpoint %}active{% endif %}">
+      <span class="sidebar-icon">🖼️</span> Gallery
+    </a>
+    <a href="{{ url_for('admin.services') }}" class="sidebar-link {% if 'service' in request.endpoint %}active{% endif %}">
+      <span class="sidebar-icon">💼</span> Services
+    </a>
+    <a href="{{ url_for('admin.testimonials') }}" class="sidebar-link {% if 'testimonial' in request.endpoint %}active{% endif %}">
+      <span class="sidebar-icon">⭐</span> Testimonials
+    </a>
+    <div class="sidebar-section">Clients</div>
+    <a href="{{ url_for('admin.bookings') }}" class="sidebar-link {% if 'booking' in request.endpoint %}active{% endif %}">
+      <span class="sidebar-icon">📅</span> Bookings
+    </a>
+    <a href="{{ url_for('admin.inquiries') }}" class="sidebar-link {% if 'inquir' in request.endpoint %}active{% endif %}">
+      <span class="sidebar-icon">✉️</span> Inquiries
+    </a>
+    <div class="sidebar-section">Site</div>
+    <a href="{{ url_for('public.index') }}" class="sidebar-link" target="_blank">
+      <span class="sidebar-icon">🌐</span> View Website
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="{{ url_for('admin.logout') }}">🚪 Log Out</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="admin-main">
+  <div class="admin-topbar">
+    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+    <div class="topbar-right">
+      <div class="topbar-user">
+        <div class="topbar-avatar">A</div>
+        <span>Admin</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for cat, msg in messages %}
+      <div class="admin-flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </div>
+</main>
+
+</body>
+</html>

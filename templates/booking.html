@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Book a Session — Lens & Light Studio{% endblock %}
+
+{% block content %}
+<div class="booking-hero">
+  <div class="container">
+    <span class="section-tag">Reserve Your Date</span>
+    <h1 class="page-hero-title">Book a <span class="gold">Session</span></h1>
+    <p class="page-hero-sub">Fill out the form below and we'll confirm your booking within 24 hours.</p>
+  </div>
+</div>
+
+<section class="section" style="padding-top:20px">
+  <div class="container">
+    <div class="card form-container">
+      <form method="POST" action="{{ url_for('public.booking') }}" id="bookingForm">
+
+        <h3 style="margin-bottom:32px;text-align:center;font-size:1.4rem">Your Information</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" placeholder="Your full name" required/>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required/>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000"/>
+          </div>
+          <div class="form-group">
+            <label for="event_date">Event Date *</label>
+            <input type="date" id="event_date" name="event_date" required/>
+          </div>
+          <div class="form-group">
+            <label for="event_type">Event Type</label>
+            <input type="text" id="event_type" name="event_type" placeholder="e.g. Wedding, Birthday, Corporate"/>
+          </div>
+          <div class="form-group">
+            <label for="location">Event Location</label>
+            <input type="text" id="location" name="location" placeholder="City or Venue name"/>
+          </div>
+        </div>
+
+        <div style="margin-top:32px;margin-bottom:24px">
+          <label style="font-size:.85rem;font-weight:600;color:var(--text-secondary);letter-spacing:.05em;display:block;margin-bottom:12px">Select Package</label>
+          <div class="service-picker">
+            <label class="service-pick-card" id="card-none">
+              <input type="radio" name="service_id" value="" checked/>
+              <div class="service-pick-name">Not Sure Yet</div>
+              <div class="service-pick-price">Discuss Later</div>
+            </label>
+            {% for service in services %}
+            <label class="service-pick-card" id="card-{{ service.id }}">
+              <input type="radio" name="service_id" value="{{ service.id }}"/>
+              <div class="service-pick-name">{{ service.name }}</div>
+              <div class="service-pick-price">${{ "%.0f"|format(service.price) }}</div>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="form-group full" style="margin-top:8px">
+          <label for="message">Additional Details</label>
+          <textarea id="message" name="message" placeholder="Tell us about your vision, special requirements, or any questions you have..."></textarea>
+        </div>
+
+        <div style="text-align:center;margin-top:32px">
+          <button type="submit" class="btn btn-primary" style="padding:16px 48px;font-size:1rem">
+            ✦ Submit Booking Request
+          </button>
+          <p style="color:var(--text-muted);font-size:.82rem;margin-top:12px">We'll confirm your booking within 24 hours</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+// Service card selection
+document.querySelectorAll('.service-pick-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.service-pick-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+  });
+});
+document.getElementById('card-none').classList.add('selected');
+
+// Set min date to today
+document.getElementById('event_date').min = new Date().toISOString().split('T')[0];
+</script>
+{% endblock %}

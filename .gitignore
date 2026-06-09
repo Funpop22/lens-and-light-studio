@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Flask / SQLite database (don't share your data)
+database/
+*.db
+*.sqlite3
+
+# Uploaded photos (too large for git — upload manually after cloning)
+static/uploads/
+
+# Environment / secrets
+.env
+*.env
+config_local.py
+
+# IDE / OS
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log

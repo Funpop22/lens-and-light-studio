@@ -1,0 +1,92 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Inquiries — Admin{% endblock %}
+{% block page_title %}Contact Inquiries{% endblock %}
+
+{% block content %}
+<style>
+.row-unread { background: rgba(201,168,76,0.03); }
+.fw-bold    { font-weight: 700; }
+.fw-normal  { font-weight: 400; }
+</style>
+
+<div class="page-header">
+  <h2>Inquiries ({{ inquiries|length }})</h2>
+</div>
+
+{% if inquiries %}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>From</th><th>Subject</th><th>Message</th><th>Received</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for i in inquiries %}
+      <tr class="{{ 'row-unread' if not i.read else '' }}">
+        <td>
+          <div class="{{ 'fw-bold' if not i.read else 'fw-normal' }}">{{ i.name }}</div>
+          <div style="font-size:.78rem;color:var(--muted)">
+            <a href="mailto:{{ i.email }}" style="color:var(--accent)">{{ i.email }}</a>
+          </div>
+        </td>
+        <td style="font-size:.85rem;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+          {{ i.subject or 'General Inquiry' }}
+        </td>
+        <td style="font-size:.82rem;color:var(--muted);max-width:250px">
+          {{ i.message[:120] }}{% if i.message|length > 120 %}…{% endif %}
+        </td>
+        <td style="font-size:.78rem;color:var(--muted);white-space:nowrap">
+          {{ i.created_at.strftime('%b %d, %Y %H:%M') }}
+        </td>
+        <td>
+          <span class="b {{ 'b-unread' if not i.read else 'b-confirmed' }}">
+            {{ 'New' if not i.read else 'Read' }}
+          </span>
+        </td>
+        <td>
+          <div style="display:flex;gap:6px">
+            {% if not i.read %}
+            <button class="btn-a btn-a-secondary"
+                    style="font-size:.75rem;padding:5px 10px"
+                    data-id="{{ i.id }}"
+                    onclick="markRead(this)">&#10003; Mark Read</button>
+            {% endif %}
+            <a href="mailto:{{ i.email }}?subject=Re: {{ i.subject }}"
+               class="btn-a btn-a-success"
+               style="font-size:.75rem;padding:5px 10px">&#8617; Reply</a>
+            <form method="POST"
+                  action="{{ url_for('admin.inquiry_delete', iid=i.id) }}"
+                  onsubmit="return confirm('Delete this inquiry?')">
+              <button type="submit"
+                      class="btn-a btn-a-danger"
+                      style="font-size:.75rem;padding:5px 10px">&#128465;</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="a-card" style="text-align:center;padding:60px">
+  <div style="font-size:3rem;margin-bottom:16px">&#9993;</div>
+  <p style="color:var(--muted)">No inquiries yet.</p>
+</div>
+{% endif %}
+
+<script>
+async function markRead(btn) {
+  const id = btn.dataset.id;
+  const resp = await fetch('/admin/inquiries/mark-read/' + id, { method: 'POST' });
+  if (resp.ok) {
+    const row = btn.closest('tr');
+    row.classList.remove('row-unread');
+    row.querySelector('.b').className   = 'b b-confirmed';
+    row.querySelector('.b').textContent = 'Read';
+    const nameDiv = row.querySelector('td div');
+    if (nameDiv) { nameDiv.className = 'fw-normal'; }
+    btn.remove();
+  }
+}
+</script>
+{% endblock %}

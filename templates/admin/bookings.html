@@ -1,0 +1,66 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Bookings — Admin{% endblock %}
+{% block page_title %}Bookings{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Bookings ({{ bookings|length }})</h2>
+  <div style="display:flex;gap:8px">
+    <a href="{{ url_for('admin.bookings') }}" class="btn-a {% if current_status=='all' %}btn-a-primary{% else %}btn-a-secondary{% endif %}">All</a>
+    <a href="{{ url_for('admin.bookings', status='pending') }}" class="btn-a {% if current_status=='pending' %}btn-a-primary{% else %}btn-a-secondary{% endif %}">Pending</a>
+    <a href="{{ url_for('admin.bookings', status='confirmed') }}" class="btn-a {% if current_status=='confirmed' %}btn-a-primary{% else %}btn-a-secondary{% endif %}">Confirmed</a>
+    <a href="{{ url_for('admin.bookings', status='cancelled') }}" class="btn-a {% if current_status=='cancelled' %}btn-a-primary{% else %}btn-a-secondary{% endif %}">Cancelled</a>
+  </div>
+</div>
+
+{% if bookings %}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Client</th><th>Service</th><th>Event Date</th><th>Event Type</th><th>Submitted</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for b in bookings %}
+      <tr>
+        <td>
+          <div style="font-weight:600">{{ b.name }}</div>
+          <div style="font-size:.78rem;color:var(--muted)">{{ b.email }}</div>
+          {% if b.phone %}<div style="font-size:.78rem;color:var(--muted)">{{ b.phone }}</div>{% endif %}
+        </td>
+        <td style="color:var(--muted);font-size:.85rem">{{ b.service.name if b.service else '—' }}</td>
+        <td style="font-weight:600;color:var(--accent)">{{ b.event_date }}</td>
+        <td style="color:var(--muted);font-size:.85rem">{{ b.event_type or '—' }}</td>
+        <td style="color:var(--muted);font-size:.78rem">{{ b.created_at.strftime('%b %d, %Y') }}</td>
+        <td><span class="b b-{{ b.status }}">{{ b.status }}</span></td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            {% if b.status != 'confirmed' %}
+            <form method="POST" action="{{ url_for('admin.booking_update_status', booking_id=b.id) }}">
+              <input type="hidden" name="status" value="confirmed"/>
+              <button type="submit" class="btn-a btn-a-success" style="font-size:.75rem;padding:5px 10px">✓ Confirm</button>
+            </form>
+            {% endif %}
+            {% if b.status != 'cancelled' %}
+            <form method="POST" action="{{ url_for('admin.booking_update_status', booking_id=b.id) }}">
+              <input type="hidden" name="status" value="cancelled"/>
+              <button type="submit" class="btn-a btn-a-danger" style="font-size:.75rem;padding:5px 10px">✗ Cancel</button>
+            </form>
+            {% endif %}
+            <form method="POST" action="{{ url_for('admin.booking_delete', booking_id=b.id) }}" onsubmit="return confirm('Delete this booking?')">
+              <button type="submit" class="btn-a btn-a-secondary" style="font-size:.75rem;padding:5px 10px">🗑</button>
+            </form>
+          </div>
+          {% if b.message %}<div style="font-size:.75rem;color:var(--muted);margin-top:6px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ b.message }}">{{ b.message }}</div>{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="a-card" style="text-align:center;padding:60px">
+  <div style="font-size:3rem;margin-bottom:16px">📅</div>
+  <p style="color:var(--muted)">No bookings {% if current_status != 'all' %}with status "{{ current_status }}"{% endif %} yet.</p>
+</div>
+{% endif %}
+{% endblock %}

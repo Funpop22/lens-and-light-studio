@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block title %}Lens & Light Studio — Professional Photography{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-orb orb1"></div>
+    <div class="hero-orb orb2"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">✦ Available for Bookings 2026</div>
+      <h1 class="hero-title">
+        Where Every<br>
+        <span class="line2">Moment Becomes</span><br>
+        Art
+      </h1>
+      <p class="hero-subtitle">Award-winning photography that captures the raw emotion, beauty, and story of your most precious moments.</p>
+      <div class="hero-actions">
+        <a href="{{ url_for('public.booking') }}" class="btn btn-primary">✦ Book a Session</a>
+        <a href="{{ url_for('public.gallery') }}" class="btn btn-outline">View Gallery →</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">500+</div>
+          <div class="hero-stat-label">Happy Clients</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">8+</div>
+          <div class="hero-stat-label">Years Experience</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">50K+</div>
+          <div class="hero-stat-label">Photos Delivered</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- FEATURED GALLERY -->
+<section class="section">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-tag">Our Work</span>
+      <h2 class="section-title">A Glimpse of <span class="gold">Our Portfolio</span></h2>
+      <p class="section-subtitle">Every image tells a story. Browse a selection of our favourite captures across all categories.</p>
+    </div>
+    <div class="gallery-grid reveal">
+      {% for photo in featured_gallery %}
+      <div class="gallery-item">
+        {% set upload_path = 'uploads/' + photo.filename %}
+        <img src="{{ url_for('static', filename=upload_path) }}"
+             alt="{{ photo.title }}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="gallery-placeholder" style="display:none">
+          <div class="ph-icon">📸</div>
+          <div class="ph-text">{{ photo.title }}</div>
+          <div style="font-size:.7rem;color:var(--accent);margin-top:4px">{{ photo.category | capitalize }}</div>
+        </div>
+        <div class="gallery-item-overlay">
+          <div class="gallery-item-info">
+            <h3>{{ photo.title }}</h3>
+            <span>{{ photo.category | capitalize }}</span>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      {% for i in range(6) %}
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <div class="ph-icon">📸</div>
+          <div class="ph-text">Upload photos via Admin Panel</div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endfor %}
+    </div>
+    <div class="text-center" style="margin-top:40px">
+      <a href="{{ url_for('public.gallery') }}" class="btn btn-outline">View Full Gallery →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES PREVIEW -->
+<section class="section" style="background:var(--bg-secondary)">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-tag">What We Offer</span>
+      <h2 class="section-title">Photography <span class="gold">Services</span></h2>
+      <p class="section-subtitle">From intimate portraits to grand weddings, we offer tailored packages for every occasion.</p>
+    </div>
+    <div class="services-grid">
+      {% set icons = ['💍','📷','🎉','👨‍👩‍👧','🏢','👶'] %}
+      {% for service in services %}
+      <div class="card service-card reveal {% if service.popular %}popular{% endif %}">
+        {% if service.popular %}<span class="badge badge-gold popular-tag">Most Popular</span>{% endif %}
+        <div class="service-icon">{{ icons[loop.index0 % icons|length] }}</div>
+        <h3 class="service-name">{{ service.name }}</h3>
+        <div class="service-price">${{ "%.0f"|format(service.price) }}<span> starting price</span></div>
+        <div class="service-duration">⏱ {{ service.duration }}</div>
+        <p class="service-desc">{{ service.description }}</p>
+        <ul class="service-features">
+          {% for f in service.features[:4] %}
+          <li>{{ f }}</li>
+          {% endfor %}
+        </ul>
+        <a href="{{ url_for('public.booking') }}" class="btn btn-primary" style="width:100%;justify-content:center">Book Now</a>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center" style="margin-top:40px">
+      <a href="{{ url_for('public.services') }}" class="btn btn-outline">See All Packages →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-tag">Client Love</span>
+      <h2 class="section-title">What Our Clients <span class="gold">Say</span></h2>
+      <p class="section-subtitle">Don't just take our word for it — hear from the people we've had the privilege to photograph.</p>
+    </div>
+    <div class="testimonials-grid">
+      {% for t in testimonials %}
+      <div class="card testimonial-card reveal">
+        <div class="stars">{% for i in range(t.rating) %}<span class="star">★</span>{% endfor %}</div>
+        <p class="testimonial-text">{{ t.review }}</p>
+        <div class="testimonial-author">
+          <div class="avatar">{{ t.avatar_initials }}</div>
+          <div>
+            <div class="author-name">{{ t.client_name }}</div>
+            <div class="author-service">{{ t.service }}</div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container" style="position:relative;z-index:1">
+    <span class="section-tag">Ready to Begin?</span>
+    <h2 class="section-title">Let's Create Something <span class="gold">Beautiful</span></h2>
+    <p>Every great photo starts with a conversation. Reach out today and let's plan your perfect session together.</p>
+    <div class="cta-actions">
+      <a href="{{ url_for('public.booking') }}" class="btn btn-primary">✦ Book Your Session</a>
+      <a href="{{ url_for('public.contact') }}" class="btn btn-outline">Get in Touch</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

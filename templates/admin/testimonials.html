@@ -1,0 +1,64 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Testimonials — Admin{% endblock %}
+{% block page_title %}Testimonials{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Testimonials ({{ testimonials|length }})</h2>
+  <button class="btn-a btn-a-primary" onclick="document.getElementById('addModal').classList.add('open')">+ Add Review</button>
+</div>
+
+{% if testimonials %}
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Client</th><th>Service</th><th>Rating</th><th>Review</th><th>Date</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for t in testimonials %}
+      <tr>
+        <td><div style="font-weight:600;display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#e8c97a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:#0a0a0f">{{ t.avatar_initials }}</div>
+          {{ t.client_name }}</div></td>
+        <td style="color:var(--muted);font-size:.85rem">{{ t.service or '—' }}</td>
+        <td><span style="color:var(--accent)">{% for i in range(t.rating) %}★{% endfor %}</span></td>
+        <td style="max-width:250px;font-size:.85rem;color:var(--muted)">{{ t.review[:100] }}{% if t.review|length > 100 %}…{% endif %}</td>
+        <td style="font-size:.78rem;color:var(--muted)">{{ t.created_at.strftime('%b %d, %Y') }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('admin.testimonial_delete', tid=t.id) }}" onsubmit="return confirm('Delete this testimonial?')">
+            <button type="submit" class="btn-a btn-a-danger" style="font-size:.75rem;padding:5px 10px">🗑 Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="a-card" style="text-align:center;padding:60px">
+  <p style="color:var(--muted)">No testimonials yet.</p>
+</div>
+{% endif %}
+
+<!-- ADD MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('addModal').classList.remove('open')">✕</button>
+    <h3 class="modal-title">Add Testimonial</h3>
+    <form method="POST" action="{{ url_for('admin.testimonial_add') }}">
+      <div class="a-form-row">
+        <div class="a-form-group"><label>Client Name *</label><input type="text" name="client_name" required/></div>
+        <div class="a-form-group"><label>Service</label><input type="text" name="service" placeholder="e.g. Wedding Package"/></div>
+      </div>
+      <div class="a-form-group">
+        <label>Rating</label>
+        <select name="rating">
+          <option value="5">★★★★★ (5)</option>
+          <option value="4">★★★★☆ (4)</option>
+          <option value="3">★★★☆☆ (3)</option>
+        </select>
+      </div>
+      <div class="a-form-group"><label>Review *</label><textarea name="review" rows="5" required placeholder="Client's review text..."></textarea></div>
+      <button type="submit" class="btn-a btn-a-primary" style="width:100%;justify-content:center;padding:12px">Add Testimonial</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

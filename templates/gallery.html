@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Gallery — Lens & Light Studio{% endblock %}
+{% block meta_desc %}Browse our photography portfolio spanning weddings, portraits, events, family, and commercial photography.{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container" style="position:relative;z-index:1">
+    <span class="section-tag">Our Portfolio</span>
+    <h1 class="page-hero-title">The <span class="gold">Gallery</span></h1>
+    <p class="page-hero-sub">Every image is a story. Explore our collection of captured moments.</p>
+  </div>
+</div>
+
+<section class="section" style="padding-top:40px">
+  <div class="container">
+    <!-- FILTERS -->
+    <div class="gallery-filter">
+      <a href="{{ url_for('public.gallery') }}" class="filter-btn {% if current_category=='all' %}active{% endif %}">All</a>
+      {% for cat in categories %}
+      <a href="{{ url_for('public.gallery', category=cat) }}" class="filter-btn {% if current_category==cat %}active{% endif %}">{{ cat | capitalize }}</a>
+      {% endfor %}
+    </div>
+
+    <!-- GRID -->
+    {% if photos %}
+    <div class="gallery-masonry" id="galleryGrid">
+      {% for photo in photos %}
+      <div class="gallery-masonry-item"
+           data-src="{{ url_for('static', filename='uploads/' + photo.filename) }}"
+           data-title="{{ photo.title }}"
+           onclick="openLightbox(this.dataset.src, this.dataset.title)">
+        <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}"
+             alt="{{ photo.title }}"
+             loading="lazy"
+             onerror="this.parentElement.querySelector('.overlay').style.display='flex';this.style.display='none'"/>
+        <div class="overlay">
+          <div style="text-align:center">
+            <div class="overlay-icon">🔍</div>
+            <div style="color:var(--text-primary);font-size:.9rem;margin-top:8px">{{ photo.title }}</div>
+            <div style="color:var(--accent);font-size:.8rem">{{ photo.category | capitalize }}</div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:80px 0">
+      <div style="font-size:4rem;margin-bottom:20px">📸</div>
+      <h3 style="color:var(--text-secondary);margin-bottom:12px">No photos in this category yet</h3>
+      <p style="color:var(--text-muted)">Upload photos through the <a href="{{ url_for('admin.gallery') }}" style="color:var(--accent)">admin panel</a>.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt=""/>
+</div>
+
+<script>
+function openLightbox(src, title) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxImg').alt = title;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(e) {
+  if (!e || e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')) {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox({target:{id:'lightbox'}}); });
+</script>
+{% endblock %}

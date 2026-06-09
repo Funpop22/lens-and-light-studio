@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Contact — Lens & Light Studio{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container" style="position:relative;z-index:1">
+    <span class="section-tag">Get In Touch</span>
+    <h1 class="page-hero-title">Say <span class="gold">Hello</span></h1>
+    <p class="page-hero-sub">Have a question or a project in mind? We'd love to hear from you.</p>
+  </div>
+</div>
+
+<section class="section" style="padding-top:20px">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <h3 style="font-size:1.6rem;margin-bottom:8px">Let's <span class="gold">Connect</span></h3>
+        <p style="color:var(--text-secondary);margin-bottom:32px">Whether you're ready to book or just have questions, reach out — we respond to every message within 24 hours.</p>
+        <div class="card contact-info-item">
+          <div class="contact-icon">📧</div>
+          <div class="contact-info-text">
+            <h4>Email</h4>
+            <p>hello@lensandlight.com</p>
+          </div>
+        </div>
+        <div class="card contact-info-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-info-text">
+            <h4>Phone</h4>
+            <p>+1 (555) 123-4567</p>
+          </div>
+        </div>
+        <div class="card contact-info-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-info-text">
+            <h4>Location</h4>
+            <p>New York, NY (Available Worldwide)</p>
+          </div>
+        </div>
+        <div class="card contact-info-item">
+          <div class="contact-icon">🕐</div>
+          <div class="contact-info-text">
+            <h4>Response Time</h4>
+            <p>Within 24 hours</p>
+          </div>
+        </div>
+        <div class="social-links" style="margin-top:8px">
+          <a href="#" class="social-link" title="Instagram">📷</a>
+          <a href="#" class="social-link" title="Facebook">💬</a>
+          <a href="#" class="social-link" title="Pinterest">📌</a>
+        </div>
+      </div>
+
+      <div class="card form-container reveal" style="padding:40px">
+        <h3 style="margin-bottom:24px;font-size:1.4rem">Send a Message</h3>
+        <form method="POST" action="{{ url_for('public.contact') }}">
+          <div class="form-grid" style="margin-bottom:20px">
+            <div class="form-group">
+              <label for="name">Your Name *</label>
+              <input type="text" id="name" name="name" placeholder="Full name" required/>
+            </div>
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" placeholder="your@email.com" required/>
+            </div>
+            <div class="form-group full">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" placeholder="What's this about?"/>
+            </div>
+            <div class="form-group full">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="6" placeholder="Tell us about your project or question..." required></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:16px">Send Message ✦</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

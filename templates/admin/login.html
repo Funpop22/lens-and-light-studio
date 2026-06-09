@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Login — Lens & Light Studio</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+<style>
+body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:radial-gradient(ellipse at center,#1a1208,#0a0a0f)}
+.login-box{width:100%;max-width:420px;padding:48px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;backdrop-filter:blur(20px)}
+.login-logo{font-family:'Playfair Display',serif;font-size:1.8rem;color:#f0ede8;text-align:center;margin-bottom:8px}
+.login-logo span{color:#c9a84c}
+.login-sub{text-align:center;color:#9b9592;font-size:.85rem;margin-bottom:36px}
+</style>
+</head>
+<body>
+<div class="login-box">
+  <div class="login-logo">Lens<span>&</span>Light</div>
+  <p class="login-sub">Admin Access</p>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}{% for cat, msg in messages %}<div class="admin-flash {{ cat }}">{{ msg }}</div>{% endfor %}{% endif %}
+  {% endwith %}
+
+  <form method="POST">
+    <div class="a-form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="admin" required autofocus/>
+    </div>
+    <div class="a-form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" required/>
+    </div>
+    <button type="submit" class="btn-a btn-a-primary" style="width:100%;justify-content:center;padding:14px;font-size:.95rem;border-radius:10px;margin-top:8px">
+      Sign In →
+    </button>
+  </form>
+  <p style="text-align:center;margin-top:20px;color:#5a5755;font-size:.8rem">
+    Default: admin / admin123
+  </p>
+</div>
+</body>
+</html>
