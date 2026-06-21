@@ -12,7 +12,7 @@ def seed():
             admin = User(username='admin', email='admin@lensandlight.com')
             admin.set_password(os.environ.get('ADMIN_PASSWORD','admin123'))
             db.session.add(admin)
-            print("[OK] Admin user created -> username: admin)
+            print("[OK] Admin user created -> username: admin")
 
         # -- Services
         if Service.query.count() == 0:
