@@ -10,9 +10,9 @@ def seed():
         # -- Admin User
         if not User.query.filter_by(username='admin').first():
             admin = User(username='admin', email='admin@lensandlight.com')
-            admin.set_password('admin123')
+            admin.set_password(os.environ.get('ADMIN_PASSWORD','admin123'))
             db.session.add(admin)
-            print("[OK] Admin user created -> username: admin | password: admin123")
+            print("[OK] Admin user created -> username: admin)
 
         # -- Services
         if Service.query.count() == 0:
